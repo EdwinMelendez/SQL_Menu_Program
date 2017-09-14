@@ -2,7 +2,8 @@ import Menu
 
 menu = Menu.db_menu()
 
-
+# main method developed with help from Mark Fox
+# loops through main as long as you continue by typing y
 def main():
     run_prog = True
     while run_prog:
@@ -14,6 +15,7 @@ def main():
             print("Shutting down...")
             run_prog = False
 
+# shows menu
 def show_menu():
     print('-' * 20)
     print('1 ------ Create Table (Auto Generated)')

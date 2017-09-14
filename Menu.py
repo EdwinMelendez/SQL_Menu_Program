@@ -50,9 +50,10 @@ class db_menu:
         conn.commit()
     # update works similarly to add method
 
+
     def update(self):
 
-        product = input("Product name to update: ")
+        product_id = input("Product ID to update: ")
         description = input("Enter short description: ")
         price = input("Price: ")
         quantity = input("Quantity: ")
@@ -61,7 +62,7 @@ class db_menu:
 
         try:
             c.execute('UPDATE TABLE_NAME SET col2=?, col3=?, col4=?, col5=?,'
-                      ' col6=? WHERE col1=?'), (description, price, quantity, category, supplier, product)
+                      ' col6=? WHERE field_id =' + product_id + ''), (description, price, quantity, category, supplier)
         except sqlite3.Error:
             print("Error; invalid entry.")
 

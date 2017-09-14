@@ -56,8 +56,8 @@ class db_menu:
         supplier = input("Supplier: ")
 
         try:
-            c.execute('UPDATE TABLE_NAME SET col2=description, col3=price, col4=quantity, col5=category,'
-                      ' col6=supplier WHERE col1=product')
+            c.execute('UPDATE TABLE_NAME SET col2=?, col3=?, col4=?, col5=?,'
+                      ' col6=? WHERE col1=?'), (description, price, quantity, category, supplier, product)
         except sqlite3.Error:
             print("Error; invalid entry.")
 
@@ -71,7 +71,7 @@ class db_menu:
         entry = input("Please enter product name to delete: ")
 
         try:
-            c.execute('DELETE FROM TABLE_NAME WHERE col1=entry')
+            c.execute('DELETE FROM TABLE_NAME WHERE  field_id =' + entry + '')
 
 
         except sqlite3.Error:
@@ -84,25 +84,43 @@ class db_menu:
 
     def display_all(self):
 
-        c.execute('SELECT * FROM TABLE_NAME ')
+        c.execute('SELECT * FROM TABLE_NAME')
 
         all_rows = c.fetchall()
 
-        print('All Entries:\n' + all_rows.__str__())
+        for row in all_rows:
+            print('[Product ID: %i ]\n'
+                  '[Product Name: %s ]\n'
+                  '[Description: %s ]\n'
+                  '[Price: %f ]\n'
+                  '[Quantity: %i ]\n'
+                  '[Category: %s ]\n'
+                  '[Supplier: %s ]\n' % row)
 
         conn.commit()
 
     def show_entry(self):
 
-        entry = input("Please enter product name to look up: ")
+        entry = input("Please enter product Id to look up: ")
 
-        try:
-            c.execute('SELECT * FROM TABLE_NAME WHERE col1=entry')
-            row = c.fetchall()
-            print('Entry for ' + entry + ':\n' + row.__str__())
+        query = 'SELECT * FROM TABLE_NAME WHERE field_id =' + entry + ''
 
-        except sqlite3.Error:
-            print("Error; unknown product.")
+        # try:
+        c.execute(query)
+        row = c.fetchone()
+
+        print('[Product ID: %i ]\n'
+              '[Product Name: %s ]\n'
+              '[Description: %s ]\n'
+              '[Price: %f ]\n'
+              '[Quantity: %i ]\n'
+              '[Category: %s ]\n'
+              '[Supplier: %s ]\n' % row)
+
+        #print(row)
+
+        # except sqlite3.Error:
+        #     print("Error; unknown product.")
 
         conn.commit()
 

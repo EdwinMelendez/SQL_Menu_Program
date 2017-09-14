@@ -1,5 +1,5 @@
 import sqlite3
-
+# all of my global variables
 sqlite_file = '/Users/DarthVader/Desktop/SQL_Menu_Program/products.sqlite'
 conn = sqlite3.connect(sqlite_file)
 c = conn.cursor()
@@ -12,9 +12,12 @@ col4 = "Quantity"
 col5 = "Category"
 col6 = "Supplier"
 
+# database class
+
 
 class db_menu:
 
+    # create statement
     def create(self):
 
         c.execute('CREATE TABLE TABLE_NAME (field_id INTEGER PRIMARY KEY NULL, col1 TEXT, col2 TEXT,'
@@ -23,9 +26,10 @@ class db_menu:
         print("Table created.")
         conn.commit()
 
-
+# add method
     def add(self):
 
+        # local variables to be plugged into columns
         product = input("Product name: ")
         description = input("Enter short description: ")
         price = input("Price: ")
@@ -44,7 +48,7 @@ class db_menu:
         print("Entry successful.")
 
         conn.commit()
-
+    # update works similarly to add method
 
     def update(self):
 

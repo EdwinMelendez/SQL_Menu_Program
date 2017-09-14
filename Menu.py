@@ -3,7 +3,7 @@ import sqlite3
 sqlite_file = '/Users/DarthVader/Desktop/SQL_Menu_Program/products.sqlite'
 conn = sqlite3.connect(sqlite_file)
 c = conn.cursor()
-table = "Products"
+table_name = "Products"
 field_id = "Product_ID"
 col1 = "Name"
 col2 = "Description"
@@ -17,8 +17,8 @@ class db_menu:
 
     def create(self):
 
-        c.execute('CREATE TABLE {tn} ({f0} INTEGER PRIMARY KEY, {f1} TEXT, {f2} TEXT, {f3} DOUBLE, {f4} INTEGER, {f5} TEXT, {f6} TEXT)'
-                  .format(tn=table, f0=field_id, f1=col1, f2=col2, f3=col3, f4=col4, f5=col5, f6=col6))
+        c.execute('CREATE TABLE TABLE_NAME (field_id INTEGER PRIMARY KEY NULL, col1 TEXT, col2 TEXT,'
+                  ' col3 DOUBLE, col4 INTEGER, col5 TEXT, col6 TEXT)')
 
         print("Table created.")
         conn.commit()
@@ -34,11 +34,8 @@ class db_menu:
         supplier = input("Supplier: ")
 
         try:
-            c.execute("INSERT OR IGNORE INTO {tn} ({c1}, {c2}, {c3}, {c4}, {c5} , {c6}) "
-                      "VALUES ({f1}, {f2}, {f3}, {f4}, {f5}, {f6})"
-                      .format(tn=table, c0=field_id, c1=col1, c2=col2, c3=col3, c4=col4, c5=col5, c6=col6,
-                              f1=product, f2=description, f3=price, f4=quantity, f5=category, f6=supplier))
-
+            c.execute("INSERT INTO TABLE_NAME (col1, col2, col3, col4, col5 , col6) "
+                      "VALUES (?, ?, ?, ?, ?, ?)", (product, description, price, quantity, category, supplier))
         except sqlite3.IntegrityError:
             print("Error with primary key")
         except sqlite3.Error:
@@ -59,10 +56,8 @@ class db_menu:
         supplier = input("Supplier: ")
 
         try:
-            c.execute('UPDATE {tn} SET ({f2}={c2}}, {f3}={c3}, {f4}={c4}, {f5}={c5}, {f6}={c6}) WHERE {f1}={c1}'
-                      .format(tn=table, f1=col1, f2=col2, c2=description, f3=col3, c3=price,
-                              f4=col4, c4=quantity, f5=col5,
-                              c5=category, c6=supplier,  f6=col6, c1=product))
+            c.execute('UPDATE TABLE_NAME SET col2=description, col3=price, col4=quantity, col5=category,'
+                      ' col6=supplier WHERE col1=product')
         except sqlite3.Error:
             print("Error; invalid entry.")
 
@@ -76,8 +71,8 @@ class db_menu:
         entry = input("Please enter product name to delete: ")
 
         try:
-            c.execute('DELETE * FROM {tn} WHERE {cn}={e}'
-                      .format(tn=table, cn=col1, e=entry))
+            c.execute('DELETE FROM TABLE_NAME WHERE col1=entry')
+
 
         except sqlite3.Error:
             print("Error; product not found.")
@@ -89,7 +84,7 @@ class db_menu:
 
     def display_all(self):
 
-        c.execute('SELECT * FROM {tn}'.format(tn=table))
+        c.execute('SELECT * FROM TABLE_NAME ')
 
         all_rows = c.fetchall()
 
@@ -102,8 +97,7 @@ class db_menu:
         entry = input("Please enter product name to look up: ")
 
         try:
-            c.execute('SELECT * FROM {tn} WHERE {cn}={e}'
-                      .format(tn=table, cn=col1, e=entry))
+            c.execute('SELECT * FROM TABLE_NAME WHERE col1=entry')
             row = c.fetchall()
             print('Entry for ' + entry + ':\n' + row.__str__())
 
@@ -114,7 +108,7 @@ class db_menu:
 
     def delete_table(self):
 
-        c.execute('DROP TABLE {tn}'.format(tn=table))
+        c.execute('DROP TABLE TABLE_NAME')
 
         print("Table Deleted. Please create new table.")
 
